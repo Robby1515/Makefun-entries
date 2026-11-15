@@ -284,7 +284,7 @@
       '<h3>The price</h3>' +
       '<p><code>implied = TVL × peer × momentum × maturity × breadth</code></p>' +
       '<ul>' +
-      '<li><strong>Peer</strong> — for the protocol’s category, the median market-cap-to-TVL of its traded peers, shrunk toward the ' +
+      '<li><strong>Peer</strong> — for the protocol’s category, the median market-cap-to-TVL of its traded peers (a peer trading above ×5 its TVL is left out as mispriced), shrunk toward the ' +
       'market median (<span class="num">' + mult(DATA.global_peer_median) + '</span>) with prior weight ' + m.peer_prior_weight + ', clamped to ' +
       '<span class="num">[' + m.peer_min + ', ' + m.peer_max + ']</span>. One traded peer is a hint; fifteen are evidence. Categories trade at ' +
       'different multiples, and a flat multiple would rank a lending market’s TVL as if it were a curator network’s.</li>' +

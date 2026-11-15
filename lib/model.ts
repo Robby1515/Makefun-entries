@@ -216,6 +216,14 @@ export interface PeerTable {
   byCategory: Map<string, { median: number; count: number }>;
 }
 
+/**
+ * The highest market-cap-to-TVL ratio that still counts as peer evidence. Above it a "peer" is a
+ * mispriced microcap or a data error — a token trading at more than five times the value locked in
+ * the protocol says nothing about what a launch is worth — so it is left out of the medians entirely
+ * rather than allowed to drag a thin category's multiple upward.
+ */
+export const PEER_RATIO_CAP = 5;
+
 /** Build the peer table from the snapshot's live-token protocols (market cap and TVL both recorded). */
 export function peerTable(snapshot: Snapshot): PeerTable {
   const ratios: number[] = [];
@@ -223,7 +231,7 @@ export function peerTable(snapshot: Snapshot): PeerTable {
   for (const p of snapshot.protocols) {
     if (p.mcap_usd === null || p.mcap_usd <= 0 || p.tvl_usd <= 0) continue;
     const r = p.mcap_usd / p.tvl_usd;
-    if (!Number.isFinite(r) || r <= 0) continue;
+    if (!Number.isFinite(r) || r <= 0 || r > PEER_RATIO_CAP) continue;
     ratios.push(r);
     if (p.category !== null) {
       const list = byCat.get(p.category) ?? [];
